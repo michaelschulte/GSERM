@@ -1,0 +1,96 @@
+---
+title: 'Exercise: Reroducibility - Group 2'
+author: MSM (Source: https://github.com/datacarpentry)
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+  fig_height: 3
+  fig_width: 6
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(include = TRUE, error = TRUE)
+```
+
+This RMarkdown file contains R code you can use to complete the exercise on reproducibility. To see the output simply click on *Knit to HTML* above. This might prompt you to install and load some required 
+packages, specifically `knitr`. 
+
+## Packages:
+
+We will use packages from **tidyverse**, a collection of R packages that 
+share common philosophies and are designed to work together. 
+
+If you have not yet done so, install tidyverse via `install.packages(tidyverse)`.
+
+Now we need to explicitly load the **tidyverse** packages:
+
+```{r package, message=FALSE, cache=FALSE}
+  library("tidyverse")
+```
+
+## Part 1: Analyze + document
+
+#### 1. Load the data: 
+
+Note that `read_csv` uses `stringsAsFactors = FALSE` by default.
+
+```{r}
+  gap_7080 <- read_csv("../0_data/gapminder-7080.csv")
+```
+
+#### 2. Visualize life expectancy over time for Austria in the 1970s and 1980s using a line plot.
+
+```{r}
+# Filter the data for Austria only
+  gap_7080_AT <- 
+    gap_7080 %>%
+    filter(country == "Austria")
+# Visualize
+  ggplot(data = gap_7080_AT, aes(x = year, y = lifeExp)) +
+    geom_line()
+```
+
+Something is clearly wrong with this plot! There seems to be data missing?!
+
+#### 3. Make appropriate corrections.
+
+Turns out there's a data error in the data file: life expectancy for 
+Austria in the year 1982 is missing, it should actually be 
+`73.18`. We now make this correction:
+  
+```{r}
+  gap_7080 <- 
+    gap_7080 %>%
+    mutate(lifeExp = replace(lifeExp, (country == "Austria" & year == 1982), 73.18))
+```
+
+Hey - we changed the problematic value AND documented it in one go - awesome!
+  
+#### 4. Visualize life expectancy over time for Austria again, with the corrected data.
+  
+Exact same code as before, but note that the contents of `gap_7080` 
+are different as it has been updated in the previous task.
+
+```{r}
+  gap_7080_AT <- 
+    gap_7080 %>%
+    filter(country == "Austria")
+
+  ggplot(data = gap_7080_AT, aes(x = year, y = lifeExp)) +
+    geom_line()
+```
+
+#### 4 - Stretch goal. Add lines for Afghanistan and Switzerland
+
+- `%in%` for logical operator testing if a country's name is in 
+the list provided
+- Same visualization code as before, only difference is the input dataset
+
+```{r}
+  gap_7080_multiple <- 
+    gap_7080 %>%
+    filter(country %in% c("Austria", "Afghanistan", "Switzerland"))
+
+  ggplot(data = gap_7080_multiple, aes(x = year, y = lifeExp, color = country)) +
+    geom_line()
+```
