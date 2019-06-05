@@ -1,4 +1,4 @@
- # GSERM
+# GSERM
 
 Summer School Open Science and Replication 
 

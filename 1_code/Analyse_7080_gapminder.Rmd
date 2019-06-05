@@ -1,6 +1,6 @@
 ---
-title: 'Exercise: Reroducibility - Group 2'
-author: MSM (Source: https://github.com/datacarpentry)
+title: 'Exercise: Reproducibility - Group 2'
+author: 'Michael Schulte-Mecklenbeck (Source: https://github.com/datacarpentry)'
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   html_document:
